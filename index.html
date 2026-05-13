@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart Student Performance System v3.1</title>
+  <title>Smart Student Performance System v3.2</title>
   <style>
     :root {
       --primary-blue: #2563eb;
@@ -16,7 +16,24 @@
       --warning: #f59e0b;
     }
 
-    /* AÇILIŞ EKRANI (LOADER) */
+    /* --- ANIMASYONLAR --- */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes pulseScale {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    /* --- LOADER --- */
     #loader {
       position: fixed;
       top: 0; left: 0;
@@ -27,123 +44,163 @@
       justify-content: center;
       align-items: center;
       z-index: 9999;
-      transition: opacity 0.8s ease, visibility 0.8s;
+      transition: all 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
     }
 
     .loader-circle {
-      width: 60px;
-      height: 60px;
-      border: 5px solid #1e293b;
-      border-top: 5px solid var(--primary-blue);
+      width: 70px; height: 70px;
+      border: 3px solid transparent;
+      border-top: 3px solid var(--primary-blue);
+      border-right: 3px solid var(--primary-blue);
       border-radius: 50%;
-      animation: spin 1s linear infinite;
+      animation: spin 0.8s cubic-bezier(0.5, 0, 0.5, 1) infinite;
     }
 
     .loader-text {
-      margin-top: 20px;
+      margin-top: 25px;
       color: white;
       font-family: 'Inter', sans-serif;
-      font-weight: 600;
-      letter-spacing: 2px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      font-size: 0.8rem;
       animation: pulse 1.5s infinite;
     }
 
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-    /* GENEL TASARIM */
+    /* --- GENEL TASARIM --- */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Inter', sans-serif; background: var(--bg-main); color: var(--text-main); line-height: 1.5; overflow-x: hidden; }
 
-    header { background: var(--card-bg); border-bottom: 1px solid #334155; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-    header h1 { font-size: 1.25rem; font-weight: 600; }
+    header { 
+      background: var(--card-bg); 
+      border-bottom: 1px solid #334155; 
+      padding: 1.5rem 2rem; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+      animation: fadeInUp 0.8s ease-out;
+    }
 
     .layout { display: grid; grid-template-columns: 260px 1fr; min-height: calc(100vh - 80px); }
-    nav { background: #111827; padding: 2rem 1rem; border-right: 1px solid #1f2937; }
+    
+    nav { 
+      background: #111827; 
+      padding: 2rem 1rem; 
+      border-right: 1px solid #1f2937;
+      animation: slideInLeft 0.8s ease-out;
+    }
 
     .nav-btn {
-      width: 100%; padding: 0.75rem 1rem; background: transparent; border: none;
+      width: 100%; padding: 0.8rem 1rem; background: transparent; border: none;
       color: var(--text-muted); text-align: left; border-radius: 0.5rem; cursor: pointer;
-      margin-bottom: 0.5rem; transition: 0.2s; font-size: 0.9rem; font-weight: 500;
+      margin-bottom: 0.6rem; transition: 0.3s; font-size: 0.9rem; font-weight: 500;
     }
-    .nav-btn.active { background: var(--primary-blue); color: white; }
-    .nav-btn:hover:not(.active) { background: #1f2937; color: #fff; }
+    .nav-btn.active { background: var(--primary-blue); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); }
+    .nav-btn:hover:not(.active) { background: #1f2937; color: #fff; transform: translateX(5px); }
 
-    main { padding: 2.5rem; }
-    .card { background: var(--card-bg); border-radius: 0.75rem; padding: 2rem; border: 1px solid #334155; margin-bottom: 2rem; }
-    h2 { margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 600; }
+    main { padding: 2.5rem; animation: fadeInUp 1s ease-out; }
+    
+    .panel { animation: fadeInUp 0.5s ease-out; }
+
+    .card { 
+      background: var(--card-bg); 
+      border-radius: 1rem; 
+      padding: 2rem; 
+      border: 1px solid #334155; 
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+    .card:hover { transform: translateY(-5px); }
+
+    h2 { margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700; color: #fff; letter-spacing: -0.5px; }
 
     .form-group { margin-bottom: 1.25rem; }
-    label { display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.4rem; text-transform: uppercase; }
-    input { width: 100%; padding: 0.75rem; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 0.5rem; outline: none; transition: 0.2s; }
-    input:focus { border-color: var(--primary-blue); }
+    label { display: block; font-size: 0.7rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 1px; }
+    
+    input { 
+      width: 100%; padding: 0.85rem; background: #0f172a; 
+      border: 1px solid #334155; color: white; border-radius: 0.6rem; 
+      outline: none; transition: all 0.3s; 
+    }
+    input:focus { border-color: var(--primary-blue); background: #1e293b; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
 
-    .btn { padding: 0.75rem 1.5rem; border-radius: 0.5rem; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; }
+    .btn { padding: 0.85rem 1.5rem; border-radius: 0.6rem; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; }
     .btn-primary { background: var(--primary-blue); color: white; width: 100%; margin-top: 1rem; }
+    .btn-primary:hover { background: #1d4ed8; filter: brightness(1.1); transform: scale(1.01); }
 
     table { width: 100%; border-collapse: collapse; }
-    th { text-align: left; color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase; padding: 1rem; border-bottom: 1px solid #334155; }
-    td { padding: 1rem; border-bottom: 1px solid #1e293b; font-size: 0.85rem; }
+    th { text-align: left; color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase; padding: 1.2rem 1rem; border-bottom: 2px solid #334155; }
+    td { padding: 1.2rem 1rem; border-bottom: 1px solid #1e293b; font-size: 0.9rem; transition: background 0.2s; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
 
     .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
-    .stat-box { background: var(--card-bg); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid #334155; }
+    .stat-box { 
+      background: var(--card-bg); padding: 1.5rem; border-radius: 1rem; 
+      border: 1px solid #334155; transition: 0.3s;
+    }
+    .stat-box:hover { border-color: var(--primary-blue); }
     .stat-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
-    .stat-val { font-size: 1.5rem; font-weight: 700; margin-top: 0.5rem; }
+    .stat-val { font-size: 1.8rem; font-weight: 800; margin-top: 0.5rem; color: #fff; }
     
-    .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; }
-    .bg-pass { background: rgba(34, 197, 94, 0.2); color: var(--success); }
-    .bg-fail { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+    .badge { padding: 5px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; }
+    .bg-pass { background: rgba(34, 197, 94, 0.15); color: var(--success); border: 1px solid rgba(34, 197, 94, 0.2); }
+    .bg-fail { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); }
   </style>
 </head>
 <body onload="closeLoader()">
 
-<!-- AÇILIŞ EKRANI -->
+<!-- GELİŞMİŞ AÇILIŞ EKRANI -->
 <div id="loader">
   <div class="loader-circle"></div>
-  <div class="loader-text">SYSTEM INITIALIZING...</div>
+  <div class="loader-text">SYSTEM SECURING...</div>
 </div>
 
 <header>
   <h1>Smart Student Performance System</h1>
-  <div style="font-size: 0.8rem; color: var(--text-muted);">Weighted Assessment v3.1</div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); background: #334155; padding: 4px 12px; border-radius: 20px;">
+    CONNECTED
+  </div>
 </header>
 
 <div class="layout">
   <nav>
-    <button class="nav-btn active" onclick="showPanel('add')">1. Add Student Data</button>
-    <button class="nav-btn" onclick="showPanel('results')">2. Academic Records</button>
-    <button class="nav-btn" onclick="showPanel('stats')">3. Smart Analysis</button>
-    <button class="nav-btn" onclick="clearData()">4. Clear Database</button>
+    <button class="nav-btn active" id="btn-add" onclick="showPanel('add')">1. Add Student Data</button>
+    <button class="nav-btn" id="btn-results" onclick="showPanel('results')">2. Academic Records</button>
+    <button class="nav-btn" id="btn-stats" onclick="showPanel('stats')">3. Smart Analysis</button>
+    <button class="nav-btn" onclick="clearData()" style="margin-top: 40px; color: var(--danger);">4. Clear Database</button>
   </nav>
 
   <main>
     <div id="panel-add" class="panel">
-      <h2>Enter Assessment Scores</h2>
+      <h2>New Record Entry</h2>
       <div class="card" style="max-width: 500px;">
         <div class="form-group">
           <label>Full Name</label>
-          <input type="text" id="name" placeholder="John Doe">
+          <input type="text" id="name" placeholder="E.g. Arda Ediz">
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
           <div class="form-group"><label>Midterm (30%)</label><input type="number" id="vize" min="0" max="100"></div>
           <div class="form-group"><label>Final (50%)</label><input type="number" id="final" min="0" max="100"></div>
         </div>
         <div class="form-group">
-          <label>Class Participation (20%)</label>
+          <label>Participation (20%)</label>
           <input type="number" id="katilim" min="0" max="100">
         </div>
-        <button class="btn btn-primary" onclick="addStudent()">Save Performance Data</button>
+        <button class="btn btn-primary" onclick="addStudent()">Commit to Database</button>
       </div>
     </div>
 
     <div id="panel-results" class="panel" style="display:none">
-      <h2>Detailed Student List</h2>
+      <h2>Academic Database</h2>
       <div class="card">
         <table>
           <thead>
             <tr>
               <th>Student</th>
-              <th>Mid/Fin/Par</th>
+              <th>Assessment</th>
               <th>Avg Score</th>
               <th>Grade</th>
               <th>Status</th>
@@ -156,23 +213,23 @@
     </div>
 
     <div id="panel-stats" class="panel" style="display:none">
-      <h2>Advanced Class Analysis</h2>
+      <h2>Smart Analysis Engine</h2>
       <div class="grid">
-        <div class="stat-box" style="border-top: 3px solid var(--primary-blue);">
-          <div class="stat-label">General Class Average</div>
+        <div class="stat-box" style="border-left: 4px solid var(--primary-blue);">
+          <div class="stat-label">Class Average</div>
           <div class="stat-val" id="st-avg">0</div>
         </div>
-        <div class="stat-box" style="border-top: 3px solid var(--warning);">
+        <div class="stat-box" style="border-left: 4px solid var(--warning);">
           <div class="stat-label">Highest Score</div>
           <div class="stat-val" id="st-high-val">0</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);" id="st-high-name">-</div>
+          <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;" id="st-high-name">-</div>
         </div>
-        <div class="stat-box" style="border-top: 3px solid var(--success);">
-          <div class="stat-label">Passed Students</div>
+        <div class="stat-box" style="border-left: 4px solid var(--success);">
+          <div class="stat-label">Passed</div>
           <div class="stat-val" id="st-pass" style="color:var(--success)">0</div>
         </div>
-        <div class="stat-box" style="border-top: 3px solid var(--danger);">
-          <div class="stat-label">Failed Students</div>
+        <div class="stat-box" style="border-left: 4px solid var(--danger);">
+          <div class="stat-label">Failed</div>
           <div class="stat-val" id="st-fail" style="color:var(--danger)">0</div>
         </div>
       </div>
@@ -183,13 +240,13 @@
 <script>
   let students = JSON.parse(localStorage.getItem('academic_data')) || [];
 
-  // AÇILIŞ EKRANI KAPATMA FONKSİYONU
   function closeLoader() {
     setTimeout(() => {
       const loader = document.getElementById('loader');
       loader.style.opacity = '0';
-      loader.style.visibility = 'hidden';
-    }, 1500); // 1.5 saniye sonra sistem açılır
+      loader.style.transform = 'scale(1.1)';
+      setTimeout(() => loader.style.visibility = 'hidden', 800);
+    }, 1800);
   }
 
   function addStudent() {
@@ -198,10 +255,9 @@
     const f = parseFloat(document.getElementById('final').value);
     const k = parseFloat(document.getElementById('katilim').value);
 
-    if(!name || isNaN(v) || isNaN(f) || isNaN(k)) return alert("Lütfen tüm alanları doldurun.");
+    if(!name || isNaN(v) || isNaN(f) || isNaN(k)) return alert("Error: Missing Data.");
 
     const avg = (v * 0.3) + (f * 0.5) + (k * 0.2);
-    
     let grade = 'F';
     if(avg >= 90) grade = 'A';
     else if(avg >= 80) grade = 'B';
@@ -211,22 +267,22 @@
     students.push({ id: Date.now(), name, v, f, k, avg, grade });
     localStorage.setItem('academic_data', JSON.stringify(students));
     
-    alert("Veriler başarıyla kaydedildi.");
+    alert("Record Success!");
     document.querySelectorAll('input').forEach(i => i.value = "");
   }
 
   function renderResults() {
     const table = document.getElementById('res-table');
     table.innerHTML = "";
-    students.forEach(s => {
+    students.sort((a,b) => b.avg - a.avg).forEach(s => {
       table.innerHTML += `
-        <tr>
-          <td style="font-weight:600">${s.name}</td>
-          <td style="color:var(--text-muted)">${s.v} / ${s.f} / ${s.k}</td>
-          <td style="font-weight:700">${s.avg.toFixed(1)}</td>
+        <tr style="animation: fadeInUp 0.3s ease forwards;">
+          <td style="font-weight:700">${s.name}</td>
+          <td style="color:var(--text-muted); font-family: monospace;">[${s.v}|${s.f}|${s.k}]</td>
+          <td style="font-weight:800; color:var(--primary-blue)">${s.avg.toFixed(1)}</td>
           <td><b>${s.grade}</b></td>
           <td><span class="badge ${s.avg >= 60 ? 'bg-pass' : 'bg-fail'}">${s.avg >= 60 ? 'PASS' : 'FAIL'}</span></td>
-          <td><button onclick="deleteStudent(${s.id})" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:0.7rem;">Delete</button></td>
+          <td><button onclick="deleteStudent(${s.id})" style="background:none; border:none; color:var(--danger); cursor:pointer; font-weight:bold; font-size:0.7rem;">REMOVE</button></td>
         </tr>`;
     });
   }
@@ -238,7 +294,7 @@
     
     document.getElementById('st-avg').innerText = avg.toFixed(1);
     document.getElementById('st-high-val').innerText = highest.avg.toFixed(1);
-    document.getElementById('st-high-name').innerText = highest.name;
+    document.getElementById('st-high-name').innerText = highest.name.toUpperCase();
     document.getElementById('st-pass').innerText = students.filter(s => s.avg >= 60).length;
     document.getElementById('st-fail').innerText = students.filter(s => s.avg < 60).length;
   }
@@ -249,13 +305,16 @@
     renderResults();
   }
 
-  function clearData() { if(confirm("Tüm veriler silinecek?")) { students = []; localStorage.clear(); location.reload(); } }
+  function clearData() { if(confirm("Destroy Database?")) { students = []; localStorage.clear(); location.reload(); } }
 
   function showPanel(id) {
     document.querySelectorAll('.panel').forEach(p => p.style.display = 'none');
     document.getElementById('panel-' + id).style.display = 'block';
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    if(event) event.currentTarget.classList.add('active');
+    
+    const activeBtn = document.getElementById('btn-' + id);
+    if(activeBtn) activeBtn.classList.add('active');
+
     if(id === 'results') renderResults();
     if(id === 'stats') updateStats();
   }
