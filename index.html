@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Akademik Performans Yönetim Sistemi v2.0</title>
+  <title>Smart Student Performance System v3.0</title>
   <style>
     :root {
       --primary-blue: #2563eb;
@@ -38,65 +38,71 @@
     h2 { margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 600; }
 
     .form-group { margin-bottom: 1.25rem; }
-    label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; }
-    input { width: 100%; padding: 0.75rem; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 0.5rem; outline: none; }
+    label { display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.4rem; text-transform: uppercase; }
+    input { width: 100%; padding: 0.75rem; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 0.5rem; outline: none; transition: 0.2s; }
     input:focus { border-color: var(--primary-blue); }
 
     .btn { padding: 0.75rem 1.5rem; border-radius: 0.5rem; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; }
-    .btn-primary { background: var(--primary-blue); color: white; }
+    .btn-primary { background: var(--primary-blue); color: white; width: 100%; margin-top: 1rem; }
 
     table { width: 100%; border-collapse: collapse; }
-    th { text-align: left; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; padding: 1rem; border-bottom: 1px solid #334155; }
-    td { padding: 1rem; border-bottom: 1px solid #1e293b; font-size: 0.9rem; }
+    th { text-align: left; color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase; padding: 1rem; border-bottom: 1px solid #334155; }
+    td { padding: 1rem; border-bottom: 1px solid #1e293b; font-size: 0.85rem; }
 
-    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-bottom: 1.5rem; }
-    .stat-box { background: var(--card-bg); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid #334155; position: relative; overflow: hidden; }
-    .stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
-    .stat-val { font-size: 1.75rem; font-weight: 700; margin-top: 0.5rem; }
-    .stat-sub { font-size: 0.85rem; margin-top: 0.25rem; opacity: 0.8; }
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+    .stat-box { background: var(--card-bg); padding: 1.5rem; border-radius: 0.75rem; border: 1px solid #334155; }
+    .stat-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
+    .stat-val { font-size: 1.5rem; font-weight: 700; margin-top: 0.5rem; }
+    
+    .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; }
+    .bg-pass { background: rgba(34, 197, 94, 0.2); color: var(--success); }
+    .bg-fail { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
   </style>
 </head>
 <body>
 
 <header>
   <h1>Smart Student Performance System</h1>
-  <div style="font-size: 0.8rem; color: var(--text-muted);">v2.0 Stable Build</div>
+  <div style="font-size: 0.8rem; color: var(--text-muted);">Weighted Assessment v3.0</div>
 </header>
 
 <div class="layout">
   <nav>
-    <button class="nav-btn active" onclick="showPanel('add')">1. Add Student</button>
-    <button class="nav-btn" onclick="showPanel('results')">2. Show All Results</button>
-    <button class="nav-btn" onclick="showPanel('stats')">3. Show Class Statistics</button>
-    <button class="nav-btn" onclick="window.location.reload()">4. Exit (Reset)</button>
+    <button class="nav-btn active" onclick="showPanel('add')">1. Add Student Data</button>
+    <button class="nav-btn" onclick="showPanel('results')">2. Academic Records</button>
+    <button class="nav-btn" onclick="showPanel('stats')">3. Smart Analysis</button>
+    <button class="nav-btn" onclick="clearData()">4. Clear Database</button>
   </nav>
 
   <main>
-    <!-- ADD STUDENT PANEL -->
     <div id="panel-add" class="panel">
-      <h2>Add New Record</h2>
+      <h2>Enter Assessment Scores</h2>
       <div class="card" style="max-width: 500px;">
         <div class="form-group">
           <label>Full Name</label>
-          <input type="text" id="name" placeholder="Enter student name">
+          <input type="text" id="name" placeholder="John Doe">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group"><label>Midterm (30%)</label><input type="number" id="vize" min="0" max="100"></div>
+          <div class="form-group"><label>Final (50%)</label><input type="number" id="final" min="0" max="100"></div>
         </div>
         <div class="form-group">
-          <label>Score (0-100)</label>
-          <input type="number" id="score" min="0" max="100" placeholder="Enter mark">
+          <label>Class Participation (20%)</label>
+          <input type="number" id="katilim" min="0" max="100">
         </div>
-        <button class="btn btn-primary" onclick="addStudent()">Save Record</button>
+        <button class="btn btn-primary" onclick="addStudent()">Save Performance Data</button>
       </div>
     </div>
 
-    <!-- RESULTS PANEL -->
     <div id="panel-results" class="panel" style="display:none">
-      <h2>Academic Records</h2>
+      <h2>Detailed Student List</h2>
       <div class="card">
         <table>
           <thead>
             <tr>
-              <th>Student Name</th>
-              <th>Score</th>
+              <th>Student</th>
+              <th>Mid/Fin/Par</th>
+              <th>Avg Score</th>
               <th>Grade</th>
               <th>Status</th>
               <th>Action</th>
@@ -107,28 +113,25 @@
       </div>
     </div>
 
-    <!-- STATISTICS PANEL (SMART ANALYSIS) -->
     <div id="panel-stats" class="panel" style="display:none">
-      <h2>Smart Analysis Reports</h2>
+      <h2>Advanced Class Analysis</h2>
       <div class="grid">
-        <div class="stat-box" style="border-left: 4px solid var(--primary-blue);">
-          <div class="stat-label">Class Average</div>
+        <div class="stat-box" style="border-top: 3px solid var(--primary-blue);">
+          <div class="stat-label">General Class Average</div>
           <div class="stat-val" id="st-avg">0</div>
         </div>
-        <div class="stat-box" style="border-left: 4px solid var(--warning);">
-          <div class="stat-label">Highest Scorer</div>
-          <div class="stat-val" id="st-high-val">-</div>
-          <div class="stat-sub" id="st-high-name">No data</div>
+        <div class="stat-box" style="border-top: 3px solid var(--warning);">
+          <div class="stat-label">Highest Score</div>
+          <div class="stat-val" id="st-high-val">0</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted);" id="st-high-name">-</div>
         </div>
-        <div class="stat-box" style="border-left: 4px solid var(--danger);">
-          <div class="stat-label">Lowest Scorer</div>
-          <div class="stat-val" id="st-low-val">-</div>
-          <div class="stat-sub" id="st-low-name">No data</div>
+        <div class="stat-box" style="border-top: 3px solid var(--success);">
+          <div class="stat-label">Passed Students</div>
+          <div class="stat-val" id="st-pass" style="color:var(--success)">0</div>
         </div>
-        <div class="stat-box" style="border-left: 4px solid var(--success);">
-          <div class="stat-label">Pass/Fail Ratio</div>
-          <div class="stat-val"><span id="st-pass" style="color:var(--success)">0</span> / <span id="st-fail" style="color:var(--danger)">0</span></div>
-          <div class="stat-sub">Total Students</div>
+        <div class="stat-box" style="border-top: 3px solid var(--danger);">
+          <div class="stat-label">Failed Students</div>
+          <div class="stat-val" id="st-fail" style="color:var(--danger)">0</div>
         </div>
       </div>
     </div>
@@ -136,32 +139,30 @@
 </div>
 
 <script>
-  let students = JSON.parse(localStorage.getItem('students')) || [];
+  let students = JSON.parse(localStorage.getItem('academic_data')) || [];
 
   function addStudent() {
     const name = document.getElementById('name').value;
-    const score = parseFloat(document.getElementById('score').value);
+    const v = parseFloat(document.getElementById('vize').value);
+    const f = parseFloat(document.getElementById('final').value);
+    const k = parseFloat(document.getElementById('katilim').value);
 
-    if(!name || isNaN(score) || score < 0 || score > 100) return alert("Please enter a valid name and score (0-100).");
+    if(!name || isNaN(v) || isNaN(f) || isNaN(k)) return alert("Lütfen tüm alanları doldurun.");
 
-    let grade = 'F';
-    if(score >= 90) grade = 'A';
-    else if(score >= 80) grade = 'B';
-    else if(score >= 70) grade = 'C';
-    else if(score >= 60) grade = 'D';
-
-    students.push({ id: Date.now(), name, score, grade, status: score >= 60 ? 'PASS' : 'FAIL' });
-    localStorage.setItem('students', JSON.stringify(students));
+    // Ağırlıklı Ortalama Hesaplama: Vize %30, Final %50, Katılım %20
+    const avg = (v * 0.3) + (f * 0.5) + (k * 0.2);
     
-    alert("Data saved successfully!");
-    document.getElementById('name').value = "";
-    document.getElementById('score').value = "";
-  }
+    let grade = 'F';
+    if(avg >= 90) grade = 'A';
+    else if(avg >= 80) grade = 'B';
+    else if(avg >= 70) grade = 'C';
+    else if(avg >= 60) grade = 'D';
 
-  function deleteStudent(id) {
-    students = students.filter(s => s.id !== id);
-    localStorage.setItem('students', JSON.stringify(students));
-    renderResults();
+    students.push({ id: Date.now(), name, v, f, k, avg, grade });
+    localStorage.setItem('academic_data', JSON.stringify(students));
+    
+    alert("Veriler başarıyla kaydedildi.");
+    document.querySelectorAll('input').forEach(i => i.value = "");
   }
 
   function renderResults() {
@@ -171,36 +172,40 @@
       table.innerHTML += `
         <tr>
           <td style="font-weight:600">${s.name}</td>
-          <td>${s.score}</td>
+          <td style="color:var(--text-muted)">${s.v} / ${s.f} / ${s.k}</td>
+          <td style="font-weight:700">${s.avg.toFixed(1)}</td>
           <td><b>${s.grade}</b></td>
-          <td style="color:${s.status === 'PASS' ? 'var(--success)' : 'var(--danger)'}; font-weight:bold">${s.status}</td>
-          <td><button class="btn" style="color:var(--danger); background:transparent; border:1px solid var(--danger); padding:4px 8px; font-size:0.75rem;" onclick="deleteStudent(${s.id})">Delete</button></td>
+          <td><span class="badge ${s.avg >= 60 ? 'bg-pass' : 'bg-fail'}">${s.avg >= 60 ? 'PASS' : 'FAIL'}</span></td>
+          <td><button onclick="deleteStudent(${s.id})" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:0.7rem;">Delete</button></td>
         </tr>`;
     });
   }
 
   function updateStats() {
     if(students.length === 0) return;
-
-    const avg = students.reduce((a, b) => a + b.score, 0) / students.length;
-    const highest = students.reduce((max, s) => s.score > max.score ? s : max, students[0]);
-    const lowest = students.reduce((min, s) => s.score < min.score ? s : min, students[0]);
-
-    document.getElementById('st-avg').innerText = avg.toFixed(2);
-    document.getElementById('st-high-val').innerText = highest.score;
+    const avg = students.reduce((a, b) => a + b.avg, 0) / students.length;
+    const highest = students.reduce((max, s) => s.avg > max.avg ? s : max, students[0]);
+    
+    document.getElementById('st-avg').innerText = avg.toFixed(1);
+    document.getElementById('st-high-val').innerText = highest.avg.toFixed(1);
     document.getElementById('st-high-name').innerText = highest.name;
-    document.getElementById('st-low-val').innerText = lowest.score;
-    document.getElementById('st-low-name').innerText = lowest.name;
-    document.getElementById('st-pass').innerText = students.filter(s => s.status === 'PASS').length;
-    document.getElementById('st-fail').innerText = students.filter(s => s.status === 'FAIL').length;
+    document.getElementById('st-pass').innerText = students.filter(s => s.avg >= 60).length;
+    document.getElementById('st-fail').innerText = students.filter(s => s.avg < 60).length;
   }
+
+  function deleteStudent(id) {
+    students = students.filter(s => s.id !== id);
+    localStorage.setItem('academic_data', JSON.stringify(students));
+    renderResults();
+  }
+
+  function clearData() { if(confirm("Tüm veriler silinecek?")) { students = []; localStorage.clear(); location.reload(); } }
 
   function showPanel(id) {
     document.querySelectorAll('.panel').forEach(p => p.style.display = 'none');
     document.getElementById('panel-' + id).style.display = 'block';
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     event.currentTarget.classList.add('active');
-    
     if(id === 'results') renderResults();
     if(id === 'stats') updateStats();
   }
